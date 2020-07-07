@@ -7,13 +7,16 @@ import ProductItem from './ProductItem';
 
 const Products = () => {
   const products = convertJSONtoArray(data);
-  console.log(products);
 
   return (
-    <div className="col-12 col-lg-6 alert alert-primary">
-      {products.map((product) => (
-        <ProductItem key={product.id} product={product} />
-      ))}
+    <div className="col-12 col-md-12 col-lg-6 order-2 order-md-2 order-lg-1 alert alert-primary">
+      <div className="row">
+        {products.map((product) => (
+          <div className="col-12 col-md-6 col-xl-4" key={product.id}>
+            <ProductItem product={product} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
