@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { toFixedNoRounding } from '../../helpers';
+import { toFixedNoRounding } from '../../../helpers';
 
-const ProductItem = ({ product: { id, title, cover, availability, price, currency } }) => {
+const ProductItem = ({ product, addProduct }) => {
+  const { title, cover, availability, price, currency } = product;
   const checkIsDisabled = () => (availability ? '' : 'disabled');
 
   return (
@@ -16,9 +17,12 @@ const ProductItem = ({ product: { id, title, cover, availability, price, currenc
             price,
           )} ${currency}`}</p>
         )}
-        <a href="#" className={`btn btn-primary card-button ${checkIsDisabled()}`}>
+        <button
+          onClick={() => addProduct(product)}
+          className={`btn btn-primary card-button ${checkIsDisabled()}`}
+        >
           Add to cart
-        </a>
+        </button>
       </div>
     </div>
   );
@@ -33,6 +37,7 @@ ProductItem.propTypes = {
     price: PropTypes.number,
     currency: PropTypes.string.isRequired,
   }),
+  addProduct: PropTypes.func.isRequired,
 };
 
 ProductItem.defaultProps = {
