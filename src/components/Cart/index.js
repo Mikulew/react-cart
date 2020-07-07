@@ -1,9 +1,9 @@
-import React from 'react';
+import { connect } from 'react-redux';
 
-const Cart = () => (
-  <div className="col-12 col-md-12 col-lg-6 order-1 order-md-1 order-lg-2 alert alert-secondary">
-    Cart
-  </div>
-);
+import Cart from './Cart';
 
-export default Cart;
+const mapStateToProps = (state) => ({ products: state.orderedProducts });
+
+const CartContainer = connect(mapStateToProps, null)(Cart);
+
+export default CartContainer;

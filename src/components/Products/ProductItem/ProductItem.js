@@ -19,7 +19,8 @@ const ProductItem = ({ product, addProduct }) => {
         )}
         <button
           onClick={() => addProduct(product)}
-          className={`btn btn-primary card-button ${checkIsDisabled()}`}
+          type="button"
+          className={`btn btn-primary ${checkIsDisabled()}`}
         >
           Add to cart
         </button>

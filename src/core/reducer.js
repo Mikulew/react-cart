@@ -9,7 +9,7 @@ export default (state = initialState, action) => {
   const { orderedProducts } = state;
 
   switch (action.type) {
-    case types.ADD_PRODUCT:
+    case types.ADD_PRODUCT: {
       if (!orderedProducts.some((orderedProduct) => orderedProduct.id === action.product.id)) {
         return {
           ...state,
@@ -23,17 +23,50 @@ export default (state = initialState, action) => {
           activeProduct: action.product,
         };
       }
-      const filteredProducts = orderedProducts.map((product) => {
+      const updatedProducts = orderedProducts.map((product) => {
         if (product.id === action.product.id) {
-          console.log('passed');
           return { ...product, count: (product.count += 1) };
         }
         return product;
       });
       return {
-        orderedProducts: [...filteredProducts],
+        orderedProducts: [...updatedProducts],
         activeProduct: action.product,
       };
+    }
+    case types.REMOVE_PRODUCT: {
+      const checkIfProductIsEmpty = orderedProducts.some((product) => {
+        if (product.id === action.id) {
+          const tempCount = product.count;
+          return !(tempCount - 1 > 0);
+        }
+        return false;
+      });
+      if (checkIfProductIsEmpty) {
+        const updatedProducts = orderedProducts.filter((product) => product.id !== action.id);
+        return {
+          orderedProducts: updatedProducts,
+          activeProduct: state.activeProduct,
+        };
+      }
+      const updatedProducts = orderedProducts.map((product) => {
+        if (product.id === action.id) {
+          return { ...product, count: (product.count -= 1) };
+        }
+        return product;
+      });
+      return {
+        orderedProducts: [...updatedProducts],
+        activeProduct: state.activeProduct,
+      };
+    }
+    case types.RESET_PRODUCT: {
+      const updatedProducts = orderedProducts.filter((product) => product.id !== action.id);
+      return {
+        orderedProducts: updatedProducts,
+        activeProduct: state.activeProduct,
+      };
+    }
     default:
       return state;
   }
