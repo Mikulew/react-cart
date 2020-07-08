@@ -3,10 +3,11 @@ import types from './types';
 const initialState = {
   orderedProducts: [],
   activeProduct: {},
+  totalOrderedProducts: 0,
 };
 
 export default (state = initialState, action) => {
-  const { orderedProducts } = state;
+  const { orderedProducts, activeProduct } = state;
 
   switch (action.type) {
     case types.ADD_PRODUCT: {
@@ -21,17 +22,19 @@ export default (state = initialState, action) => {
             },
           ],
           activeProduct: action.product,
+          totalOrderedProducts: state.totalOrderedProducts + 1,
         };
       }
       const updatedProducts = orderedProducts.map((product) => {
         if (product.id === action.product.id) {
-          return { ...product, count: (product.count += 1) };
+          return { ...product, count: product.count + 1 };
         }
         return product;
       });
       return {
         orderedProducts: [...updatedProducts],
         activeProduct: action.product,
+        totalOrderedProducts: state.totalOrderedProducts + 1,
       };
     }
     case types.REMOVE_PRODUCT: {
@@ -46,25 +49,30 @@ export default (state = initialState, action) => {
         const updatedProducts = orderedProducts.filter((product) => product.id !== action.id);
         return {
           orderedProducts: updatedProducts,
-          activeProduct: state.activeProduct,
+          activeProduct,
+          totalOrderedProducts: state.totalOrderedProducts - 1,
         };
       }
       const updatedProducts = orderedProducts.map((product) => {
         if (product.id === action.id) {
-          return { ...product, count: (product.count -= 1) };
+          return { ...product, count: product.count - 1 };
         }
         return product;
       });
       return {
         orderedProducts: [...updatedProducts],
-        activeProduct: state.activeProduct,
+        activeProduct,
+        totalOrderedProducts: state.totalOrderedProducts - 1,
       };
     }
     case types.RESET_PRODUCT: {
+      const getActiveProduct = orderedProducts.filter((product) => product.id === action.id);
+      const getOrderedProductCount = getActiveProduct[0].count;
       const updatedProducts = orderedProducts.filter((product) => product.id !== action.id);
       return {
         orderedProducts: updatedProducts,
-        activeProduct: state.activeProduct,
+        activeProduct,
+        totalOrderedProducts: state.totalOrderedProducts - getOrderedProductCount,
       };
     }
     default:
